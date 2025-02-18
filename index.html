@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>可爱随机数生成器</title>
+    <title>炫酷随机数生成器</title>
     <style>
         body {
             display: flex;
@@ -12,59 +12,116 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #ffe6e6;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+            transition: background 0.5s;
         }
 
         .container {
             text-align: center;
-            background-color: white;
+            background: rgba(255, 255, 255, 0.9);
             padding: 2rem;
             border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
 
         .number-display {
-            font-size: 4rem;
+            font-size: 6rem;
             color: #ff6b6b;
             margin: 1rem 0;
-            min-height: 100px;
+            min-height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .number-display.animate {
+            animation: pulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         .button {
-            padding: 12px 24px;
+            padding: 15px 30px;
             margin: 10px;
             border: none;
             border-radius: 25px;
             font-size: 1.2rem;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .button:hover::after {
+            width: 200px;
+            height: 200px;
         }
 
         .start {
-            background-color: #77dd77;
+            background: linear-gradient(45deg, #77dd77, #4ecdc4);
             color: white;
+            box-shadow: 0 4px 15px rgba(119, 221, 119, 0.3);
         }
 
         .stop {
-            background-color: #ff6b6b;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
             color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
         }
 
         .button:hover {
-            transform: scale(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
         .button:active {
-            transform: scale(0.95);
+            transform: translateY(1px);
         }
 
         h1 {
-            color: #ff6b6b;
+            color: white;
             margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 2.5rem;
+        }
+
+        .used-numbers {
+            margin-top: 2rem;
+            font-size: 1rem;
+            color: #666;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -76,12 +133,14 @@
             <button class="button start" id="startBtn">开始</button>
             <button class="button stop" id="stopBtn" disabled>停止</button>
         </div>
+        <div class="used-numbers" id="usedNumbers">已使用的数字：</div>
     </div>
 
     <script>
         const numberDisplay = document.getElementById('numberDisplay');
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
+        const usedNumbersDisplay = document.getElementById('usedNumbers');
         
         let interval;
         let usedNumbers = new Set();
@@ -94,6 +153,11 @@
             }
         }
 
+        function updateUsedNumbers() {
+            const numbers = Array.from(usedNumbers).sort((a, b) => a - b);
+            usedNumbersDisplay.textContent = `已使用的数字：${numbers.join(', ')}`;
+        }
+
         function startGenerator() {
             if (availableNumbers.length === 0) {
                 alert('所有数字都已经使用过了！');
@@ -102,10 +166,13 @@
 
             startBtn.disabled = true;
             stopBtn.disabled = false;
+            numberDisplay.classList.add('animate');
 
             interval = setInterval(() => {
                 shuffleArray(availableNumbers);
                 numberDisplay.textContent = availableNumbers[0];
+                // 随机改变背景渐变
+                document.body.style.background = `linear-gradient(${Math.random() * 360}deg, #ff6b6b, #4ecdc4)`;
             }, 100);
         }
 
@@ -113,10 +180,12 @@
             clearInterval(interval);
             startBtn.disabled = false;
             stopBtn.disabled = true;
+            numberDisplay.classList.remove('animate');
 
             const selectedNumber = parseInt(numberDisplay.textContent);
             usedNumbers.add(selectedNumber);
             availableNumbers = availableNumbers.filter(num => num !== selectedNumber);
+            updateUsedNumbers();
 
             if (availableNumbers.length === 0) {
                 startBtn.disabled = true;

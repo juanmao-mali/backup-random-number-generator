@@ -1,0 +1,99 @@
+第一步：创建 GitHub 账号（如果已有可跳过）
+ 访问 https://github.com
+ 点击 "Sign up" 注册账号
+ 按提示填写用户名、邮箱和密码
+
+第二步：在 GitHub 上创建新仓库
+ 登录 GitHub 后，点击右上角 "+" 图标
+ 选择 "New repository"
+ 填写仓库信息：
+ Repository name: 比如 random-number-generator
+ Description: 可选填写项目描述
+ 选择 "Public"（公开）或 "Private"（私有）
+ 不要勾选 "Initialize this repository with a README"
+ 点击 "Create repository"
+
+第三步：本地安装 Git（如果已安装可跳过）
+访问 https://git-scm.com/downloads
+下载对应操作系统的版本
+安装时全部默认选项即可
+
+第四步：配置 Git
+在终端（命令行）win+R中执行：
+# 设置用户名
+git config --global user.name "你的GitHub用户名"
+git config --global user.name "juanmao-mali"
+
+# 设置邮箱
+git config --global user.email "你的GitHub邮箱"
+git config --global user.name "juanmao-mali"
+
+
+
+第五步：初始化本地仓库
+在你的项目文件夹中打开终端，执行：
+# 初始化 Git 仓库
+git init
+
+# 确认 .gitignore 文件已创建并包含正确内容
+# 之前我们已经创建了 .gitignore 文件
+
+# 添加所有文件到暂存区
+git add .
+
+# 创建第一个提交
+git commit -m "初始化项目：随机数生成器的基础功能实现"
+
+# 查看提交历史
+git log --oneline
+
+
+这样你就成功添加了项目文档。每次你对代码做出更改后，都可以用类似的方式提交：
+git status 查看状态,可以查看未提交的文件
+git add # 添加所有文件到暂存区，添加更改
+git commit # 创建提交更改
+git log # 查看提交历史，确认提交
+
+
+第六步：现在你的本地仓库已经建立好了。接下来你可以：
+创建 GitHub 远程仓库（如果还没有的话）：
+访问 https://github.com
+点击右上角 "+" -> "New repository"
+填写仓库名（比如 random-number-generator）
+不要勾选 "Initialize this repository with a README"
+点击 "Create repository"
+连接并推送到远程仓库：
+
+# 添加远程仓库（将 YOUR_USERNAME 替换为你的 GitHub 用户名）， Win + R，输入 cmd，然后用 cd 命令进入项目目录
+git remote add origin https://github.com/juanmao-mali/backup-random-number-generator.git
+
+# 推送代码到远程仓库
+git push -u origin master
+---------------------------------------
+太好了！你已经成功将代码推送到了 GitHub 仓库。这个输出显示：
+所有文件都已成功上传
+创建了新的 master 分支
+本地分支已经与远程分支建立了跟踪关系
+
+现在你可以：
+1、访问你的 GitHub 仓库查看代码：
+https://github.com/juanmao-mali/backup-random-number-generator
+
+2、以后当你修改代码后，可以使用以下命令推送更新：
+git add .
+git commit -m "你的更新说明"
+git push
+
+3、如果你想查看远程仓库的状态：
+# 查看远程仓库信息
+git remote -v
+
+# 查看分支状态
+git status
+
+4、现在你的代码已经有了云端备份，并且可以：
+随时查看所有的修改历史
+在任何电脑上克隆和使用你的代码
+方便地回退到之前的版本
+
+
