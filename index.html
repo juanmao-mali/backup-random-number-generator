@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可爱随机数生成器</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #ffe6e6;
+            font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .number-display {
+            font-size: 4rem;
+            color: #ff6b6b;
+            margin: 1rem 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button {
+            padding: 12px 24px;
+            margin: 10px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .start {
+            background-color: #77dd77;
+            color: white;
+        }
+
+        .stop {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        h1 {
+            color: #ff6b6b;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 随机数生成器 🎲</h1>
+        <div class="number-display" id="numberDisplay">?</div>
+        <div>
+            <button class="button start" id="startBtn">开始</button>
+            <button class="button stop" id="stopBtn" disabled>停止</button>
+        </div>
+    </div>
+
+    <script>
+        const numberDisplay = document.getElementById('numberDisplay');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        
+        let interval;
+        let usedNumbers = new Set();
+        let availableNumbers = Array.from({length: 100}, (_, i) => i + 1);
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startGenerator() {
+            if (availableNumbers.length === 0) {
+                alert('所有数字都已经使用过了！');
+                return;
+            }
+
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+
+            interval = setInterval(() => {
+                shuffleArray(availableNumbers);
+                numberDisplay.textContent = availableNumbers[0];
+            }, 100);
+        }
+
+        function stopGenerator() {
+            clearInterval(interval);
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+
+            const selectedNumber = parseInt(numberDisplay.textContent);
+            usedNumbers.add(selectedNumber);
+            availableNumbers = availableNumbers.filter(num => num !== selectedNumber);
+
+            if (availableNumbers.length === 0) {
+                startBtn.disabled = true;
+                alert('所有数字都已经使用过了！');
+            }
+        }
+
+        startBtn.addEventListener('click', startGenerator);
+        stopBtn.addEventListener('click', stopGenerator);
+    </script>
+</body>
+</html> 
