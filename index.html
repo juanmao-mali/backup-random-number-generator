@@ -46,14 +46,46 @@
             transition: all 0.3s ease;
         }
 
-        .number-display.animate {
-            animation: pulse 0.5s ease-in-out infinite;
+        .number-display::before {
+            content: '🎲';
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0;
+            transform: scale(0);
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .number-display.animate::before {
+            animation: diceRoll 1s infinite;
+        }
+
+        @keyframes diceRoll {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(0deg) translateY(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1) rotate(180deg) translateY(-50px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0) rotate(360deg) translateY(-100px);
+            }
+        }
+
+        .number-display.animate {
+            animation: numberBounce 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes numberBounce {
+            0% { 
+                transform: scale(1);
+                text-shadow: 0 0 10px rgba(127, 127, 213, 0.5);
+            }
+            100% { 
+                transform: scale(1.1);
+                text-shadow: 0 0 20px rgba(127, 127, 213, 0.8);
+            }
         }
 
         .button {
@@ -125,6 +157,24 @@
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
+
+        /* 添加彩色粒子效果 */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            animation: particleFade 1s ease-out forwards;
+        }
+
+        @keyframes particleFade {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) rotate(360deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -160,6 +210,26 @@
             usedNumbersDisplay.textContent = `已使用的数字：${numbers.join(', ')}`;
         }
 
+        // 添加粒子效果函数
+        function createParticle(x, y) {
+            const particle = document.createElement('span');
+            particle.className = 'particle';
+            particle.textContent = ['🎲', '✨', '🎯', '🎨'][Math.floor(Math.random() * 4)];
+            
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 100 + Math.random() * 100;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            
+            particle.style.setProperty('--tx', `${tx}px`);
+            particle.style.setProperty('--ty', `${ty}px`);
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 1000);
+        }
+
         function startGenerator() {
             if (availableNumbers.length === 0) {
                 alert('所有数字都已经使用过了！');
@@ -170,9 +240,21 @@
             stopBtn.disabled = false;
             numberDisplay.classList.add('animate');
 
+            // 添加粒子效果
+            const rect = numberDisplay.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
             interval = setInterval(() => {
                 shuffleArray(availableNumbers);
                 numberDisplay.textContent = availableNumbers[0];
+                
+                // 随机位置创建粒子
+                createParticle(
+                    centerX + (Math.random() - 0.5) * 100,
+                    centerY + (Math.random() - 0.5) * 100
+                );
+
                 const hue = Math.random() * 60 + 180;
                 document.body.style.background = `linear-gradient(${Math.random() * 360}deg, 
                     hsl(${hue}, 60%, 70%), 
