@@ -12,18 +12,18 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(45deg, #7f7fd5, #86a8e7, #91eae4);
             font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
-            transition: background 0.5s;
+            transition: background 1s ease;
         }
 
         .container {
             text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2.5rem;
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            backdrop-filter: blur(20px);
             transform: translateY(0);
             transition: all 0.3s ease;
         }
@@ -35,8 +35,8 @@
 
         .number-display {
             font-size: 6rem;
-            color: #ff6b6b;
-            margin: 1rem 0;
+            color: #7f7fd5;
+            margin: 1.5rem 0;
             min-height: 120px;
             display: flex;
             align-items: center;
@@ -87,15 +87,15 @@
         }
 
         .start {
-            background: linear-gradient(45deg, #77dd77, #4ecdc4);
+            background: linear-gradient(45deg, #88d8b0, #86a8e7);
             color: white;
-            box-shadow: 0 4px 15px rgba(119, 221, 119, 0.3);
+            box-shadow: 0 4px 15px rgba(134, 168, 231, 0.3);
         }
 
         .stop {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
         }
 
         .button:hover {
@@ -108,20 +108,22 @@
         }
 
         h1 {
-            color: white;
+            color: #4a4a8f;
             margin-bottom: 2rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             font-size: 2.5rem;
         }
 
         .used-numbers {
             margin-top: 2rem;
             font-size: 1rem;
-            color: #666;
-            max-width: 300px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            color: #7f7fd5;
+            max-width: 80%;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
@@ -171,8 +173,11 @@
             interval = setInterval(() => {
                 shuffleArray(availableNumbers);
                 numberDisplay.textContent = availableNumbers[0];
-                // 随机改变背景渐变
-                document.body.style.background = `linear-gradient(${Math.random() * 360}deg, #ff6b6b, #4ecdc4)`;
+                const hue = Math.random() * 60 + 180;
+                document.body.style.background = `linear-gradient(${Math.random() * 360}deg, 
+                    hsl(${hue}, 60%, 70%), 
+                    hsl(${hue + 30}, 60%, 70%), 
+                    hsl(${hue + 60}, 60%, 70%))`;
             }, 100);
         }
 
